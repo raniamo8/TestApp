@@ -40,7 +40,7 @@ import org.w3c.dom.Text;
 
 import android.util.Log;
 
-public class Recipient extends AsyncTask<String, String, String> {
+public class Recipient {
 
 
     private String name;
@@ -109,89 +109,4 @@ public class Recipient extends AsyncTask<String, String, String> {
         thread.start();
     }
 
-    @Override
-    protected String  doInBackground(String... params) {
-
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-
-        try {
-            URL url = new URL(params[0]);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-
-
-            InputStream stream = connection.getInputStream();
-
-            reader = new BufferedReader(new InputStreamReader(stream));
-
-            StringBuffer buffer = new StringBuffer();
-            String line = "";
-
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line+"\n");
-                Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-
-            }
-
-            return buffer.toString();
-
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-    public static List<Recipient> getNameList () {
-        List<Recipient> recipients = new ArrayList<>();
-        try {
-            URL url = new URL("http://131.173.65.77:3000/all-users");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Accept", "application/json");
-
-
-            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-
-            String output;
-            StringBuilder sb = new StringBuilder();
-
-           // while ((output = br.readLine()) != null) {
-           //     sb.append(output);
-           // }
-            System.out.println(br.readLine());
-            JSONArray jsonArray = new JSONArray(sb.toString());
-
-            Gson gson = new GsonBuilder().create();
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Recipient recipient = gson.fromJson(jsonObject.toString(), Recipient.class);
-                recipients.add(recipient);
-            }
-
-            Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-            Log.i("MSG" , conn.getResponseMessage());
-            conn.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-        return recipients;
-    }
 }
