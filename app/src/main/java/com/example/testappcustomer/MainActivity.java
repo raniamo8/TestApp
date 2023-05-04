@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     public void generateQRCode() {
         String text = PersonName.getText().toString().trim();
         MultiFormatWriter writer = new MultiFormatWriter();
