@@ -1,4 +1,5 @@
 package com.example.testapp;
 
-public class StoreDetail {
+public class
+StoreDetail {
 }

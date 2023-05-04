@@ -23,6 +23,12 @@
         android:layout_height="63dp"
         android:text="QR-Code generieren" />
 
+    <Button
+        android:id="@+id/button_get_name"
+        android:layout_width="202dp"
+        android:layout_height="63dp"
+        android:text="Get Name" />
+
     <ImageView
         android:id="@+id/qr_code"
         android:layout_width="match_parent"
