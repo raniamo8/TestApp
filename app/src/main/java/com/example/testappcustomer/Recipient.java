@@ -1,67 +1,71 @@
 package com.example.testappcustomer;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.ImageView;
 
 
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testapp.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.DataOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import org.w3c.dom.Text;
-
 import android.util.Log;
 
+/**
+ * The type Recipient.
+ */
 public class Recipient {
 
 
     private String name;
 
-    public Recipient(){}
+    /**
+     * Instantiates a new Recipient.
+     */
+    public Recipient() { }
 
 
-
-    public Recipient(String name){
+    /**
+     * Instantiates a new Recipient.
+     *
+     * @param name the name
+     */
+    public Recipient(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
 
+    /**
+     * Generate qr code.
+     *
+     * @param qrCodeImageView the qr code image view
+     */
     public void generateQRCode(ImageView qrCodeImageView) {
         String text = name.trim();
         MultiFormatWriter writer = new MultiFormatWriter();
@@ -75,6 +79,12 @@ public class Recipient {
         }
     }
 
+
+    /**
+     * Send post.
+     *
+     * @parm
+     */
     public void sendPost() {
         Thread thread = new Thread(new Runnable() {
             @Override

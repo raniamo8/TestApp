@@ -1,6 +1,6 @@
 package com.example.testappcustomer;
 
-import android.annotation.SuppressLint;
+
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testapp.R;
@@ -28,20 +29,34 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.io.DataOutputStream;
 import java.util.ArrayList;
 
 import android.util.Log;
 import android.widget.ListView;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "All Users";
     private ListView listView;
     private ArrayAdapter<String> adapter;
+    /**
+     * The Person name.
+     */
     EditText PersonName;
+    /**
+     * The Button generate.
+     */
     Button button_generate;
+    /**
+     * The Qr code.
+     */
     ImageView qr_code;
+    /**
+     * The Button get name.
+     */
     Button button_get_name;
 
 
@@ -72,8 +87,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
+    /**
+     * Generate qr code.
+     */
     public void generateQRCode() {
         String text = PersonName.getText().toString().trim();
         MultiFormatWriter writer = new MultiFormatWriter();
@@ -90,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private class DownloadJsonTask extends AsyncTask<String, Void, ArrayList<String>> {
+        @Nullable
         @Override
         protected ArrayList<String> doInBackground(String... urls) {
             try {
@@ -140,8 +157,6 @@ public class MainActivity extends AppCompatActivity {
                     adapter.add(value);
                 }
             }
-
-
         }
     }
 }
