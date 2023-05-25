@@ -1,9 +1,8 @@
 package com.example.testappcustomer;
+
 import android.graphics.Bitmap;
-
+import android.util.Log;
 import android.widget.ImageView;
-
-
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -13,24 +12,29 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.json.JSONObject;
 
-
+import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.io.DataOutputStream;
-import android.util.Log;
+
 
 /**
  * The type Recipient.
  */
 public class Recipient {
-
-
+    /**
+     * Width and height of QRCode.
+     */
+    private static final int WIDTHHEIGHTNR = 400;
+    /**
+     * Customer Name.
+     */
     private String name;
 
     /**
      * Instantiates a new Recipient.
      */
-    public Recipient() { }
+    public Recipient() {
+    }
 
 
     /**
@@ -62,15 +66,23 @@ public class Recipient {
 
 
     /**
-     * Generate qr code.
-     *
-     * @param qrCodeImageView the qr code image view
+     * Generates a QR code based on the provided textand displays
+     * it in the specified ImageView.
+     * The text is trimmed to remove leading and trailing whitespace
+     * before generating the QR code.
+     * The QR code is generated using the MultiFormatWriter with a
+     * size of 400x400 pixels and the QR_CODE format.
+     * The generated QR code is then set as the image in the
+     * specified ImageView.
+     * @param qrCodeImageView The ImageView in which to display the
+     *                        generated QR code.
      */
     public void generateQRCode(ImageView qrCodeImageView) {
         String text = name.trim();
         MultiFormatWriter writer = new MultiFormatWriter();
         try {
-            BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 400, 400);
+            BitMatrix matrix = writer.encode(text,
+                    BarcodeFormat.QR_CODE, WIDTHHEIGHTNR, WIDTHHEIGHTNR);
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap bitmap = encoder.createBitmap(matrix);
             qrCodeImageView.setImageBitmap(bitmap);
@@ -81,9 +93,15 @@ public class Recipient {
 
 
     /**
-     * Send post.
+     * Sends a HTTP-POST request to a specified URL which is
+     * the database with the recipient's name as JSON web token in
+     * the request body.
+     * The method runs in a separate thread to perform the
+     * network operation.
+     * The console displays a HTTP code whether the JSON web token
+     * was post successful or not
      *
-     * @parm
+     * @throws Exception if an error occurs during the HTTP-POST request.
      */
     public void sendPost() {
         Thread thread = new Thread(new Runnable() {
@@ -91,23 +109,30 @@ public class Recipient {
             public void run() {
                 try {
                     URL url = new URL("http://131.173.65.77:3000/test-user");
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    HttpURLConnection conn = (HttpURLConnection)
+                            url.openConnection();
                     conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
+                    conn.setRequestProperty("Content-Type",
+                            "application/json;charset=UTF-8");
+                    conn.setRequestProperty("Accept",
+                            "application/json");
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
 
                     JSONObject jsonParam = new JSONObject();
                     jsonParam.put("name", name);
 
-                    Log.i("JSON", jsonParam.toString());
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                    Log.i("JSON",
+                            jsonParam.toString());
+                    DataOutputStream os =
+                            new DataOutputStream(conn.getOutputStream());
                     os.writeBytes(jsonParam.toString());
                     os.flush();
                     os.close();
-                    Log.i("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.i("MSG" , conn.getResponseMessage());
+                    Log.i("STATUS",
+                            String.valueOf(conn.getResponseCode()));
+                    Log.i("MSG",
+                            conn.getResponseMessage());
 
                     conn.disconnect();
                 } catch (Exception e) {
