@@ -66,12 +66,10 @@ public class Recipient {
 
 
     /**
-     * Generates a QR code based on the provided textand displays
+     * Generates a QR code based on the provided text and displays
      * it in the specified ImageView.
      * The text is trimmed to remove leading and trailing whitespace
      * before generating the QR code.
-     * The QR code is generated using the MultiFormatWriter with a
-     * size of 400x400 pixels and the QR_CODE format.
      * The generated QR code is then set as the image in the
      * specified ImageView.
      * @param qrCodeImageView The ImageView in which to display the
@@ -90,6 +88,7 @@ public class Recipient {
             e.printStackTrace();
         }
     }
+
 
 
     /**

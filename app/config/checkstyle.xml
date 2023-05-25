@@ -76,7 +76,6 @@
         <property name="fileExtensions" value="java"/>
 <!--        <property name="max" value="120"/>-->
         <property name="max" value="160"/>
-        <property name="sum" value=""/>
     </module>
 
     <!-- Checks for whitespace                               -->
