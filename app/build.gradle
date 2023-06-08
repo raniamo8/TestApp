@@ -39,7 +39,6 @@ checkstyle {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
-    implementation fileTree(dir: 'C:\\Users\\ranea\\AppData\\Local\\Android\\Sdk\\platforms\\android-33', include: ['*.aar', '*.jar'], exclude: [])
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
