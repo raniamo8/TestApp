@@ -17,8 +17,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Checks if the sendPost method behaves correctly when there is no server connection.
- * The method should not throw any exceptions.
+ * The is the test section for the class Recipient.
  */
 public class RecipientTest {
 
