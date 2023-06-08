@@ -33,7 +33,7 @@ public class RecipientTest {
      * Checks if the getName method returns the correct name of the recipient.
      */
     @Test
-    public void getNameTest() {
+    public void testGetName() {
         String name = recipient.getName();
         assertEquals("slimshady", name);
     }
@@ -42,29 +42,29 @@ public class RecipientTest {
      * Checks if the setName method sets the name of the recipient correctly.
      */
     @Test
-    public void setNameTest() {
+    public void testSetName() {
         recipient.setName("Springer");
         String name = recipient.getName();
         assertEquals("Springer", name);
     }
 
+    /**
+     * Checks if the function behaves correctly if there is no connection to the server.
+     * The console should not throw any Exception, because it is not attempting to make an
+     * HTTP POST request without a server connection.
+     */
     @Test
     public void testSendPostWithoutServerConnection() {
         // Redirect System.out to capture console output
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
-
         //Creating a new Recipient
         Recipient recipient = new Recipient("Admirali");
         recipient.sendPost();
-
         // Restore original System.out
         System.setOut(System.out);
-
         // Check if any exception is thrown in the console
         String consoleOutput = outputStream.toString();
         assertFalse(consoleOutput.contains("Exception"));
     }
-
-
 }
