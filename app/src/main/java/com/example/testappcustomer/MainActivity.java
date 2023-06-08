@@ -1,95 +1,124 @@
 package com.example.testappcustomer;
 
-import android.annotation.SuppressLint;
-import android.graphics.Bitmap;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testapp.R;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.io.DataOutputStream;
 import java.util.ArrayList;
 
-import android.util.Log;
-import android.widget.ListView;
-
+/**
+ * The class Main activity.
+ */
 public class MainActivity extends AppCompatActivity {
-
+    /**
+     * The tag for all users.
+     */
     private static final String TAG = "All Users";
+    /**
+     * The Listview.
+     */
     private ListView listView;
+    /**
+     * The arraylist for the names.
+     */
     private ArrayAdapter<String> adapter;
-    EditText PersonName;
-    Button button_generate;
-    ImageView qr_code;
-    Button button_get_name;
+    /**
+     * The Person name.
+     */
+    private EditText personName;
+    /**
+     * The Button generate.
+     */
+    private Button buttonGenerate;
 
 
+    /**
+     * The Qr code.
+     */
+    private ImageView qrCode;
+    /**
+     * The Button get name.
+     */
+    private Button buttonGetName;
 
+
+    /**
+     * This method is called when the activity is created.
+     * It initializes the layout and views, and sets up the
+     * click listeners for the "Generate" and "Get Name" buttons.
+     *
+     * The "Generate" button click listener retrieves the name
+     * entered in the "PersonName" field, creates a
+     * recipient object with the entered name,
+     * sends a POST request to a server using the
+     * recipient's information and generates a QR code
+     * representing the recipient's data.
+     * The QR code is then displayed in the corresponding view.
+     *
+     * The "Get Name" button click listener initiates a task to download
+     * JSON data from the specified URL ("http://131.173.65.77:3000/all-users")
+     * It sets up a ListView and an ArrayAdapter to
+     * display the downloaded user names in the list view.
+     *
+     * @param savedInstanceState The saved instance state of the activity
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.example.testapp.R.layout.activity_main);
 
-        PersonName = findViewById(R.id.PersonName);
-        button_generate = findViewById(R.id.button_generate);
-        qr_code = findViewById(R.id.qr_code);
-        button_get_name = findViewById(R.id.button_get_name);
+        personName = findViewById(R.id.PersonName);
+        buttonGenerate = findViewById(R.id.button_generate);
+        qrCode = findViewById(R.id.qr_code);
+        buttonGetName = findViewById(R.id.button_get_name);
 
-        button_generate.setOnClickListener(view -> {
-            String name = PersonName.getText().toString().trim();
+        buttonGenerate.setOnClickListener(view -> {
+            String name = personName.getText().toString().trim();
             Recipient recipient = new Recipient(name);
             recipient.sendPost();
-            recipient.generateQRCode(qr_code);
+            recipient.generateQRCode(qrCode);
         });
 
-        button_get_name.setOnClickListener(view -> {
+        buttonGetName.setOnClickListener(view -> {
             new DownloadJsonTask().execute("http://131.173.65.77:3000/all-users");
             listView = findViewById(R.id.user_list_view);
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<String>());
+            adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1,
+                    new ArrayList<String>());
             listView.setAdapter(adapter);
         });
     }
 
-
-
-
-    public void generateQRCode() {
-        String text = PersonName.getText().toString().trim();
-        MultiFormatWriter writer = new MultiFormatWriter();
-        try {
-            BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 400, 400);
-            BarcodeEncoder encoder = new BarcodeEncoder();
-            Bitmap bitmap = encoder.createBitmap(matrix);
-            qr_code.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
+    /**
+     * This AsyncTask subclass performs a background
+     * task to download JSON data from the specified URL.
+     * The downloaded JSON data is then parsed to extract
+     * the "name" field from each JSON object and the extracted
+     * names are stored in an ArrayList.
+     *
+     */
     private class DownloadJsonTask extends AsyncTask<String, Void, ArrayList<String>> {
+        @Nullable
         @Override
         protected ArrayList<String> doInBackground(String... urls) {
             try {
@@ -127,12 +156,17 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        /* @Override
-         protected void onPostExecute(String result) {
-             if (result != null) {
-                 Log.d(TAG, "Downloaded JSON data: " + result);
-             }
-         }*/
+        /**
+         * This method is called after the background
+         * task (JSON data download and parsing) is completed.
+         * It updates the adapter with the downloaded names,
+         * clearing the previous data and adding the new names.
+         * If the result is not null, the names are added to the adapter.
+         *
+         * @param result The ArrayList containing the
+         *               extracted names from the downloaded
+         *               JSON data.
+         */
         protected void onPostExecute(ArrayList<String> result) {
             adapter.clear();
             if (result != null) {
@@ -140,9 +174,8 @@ public class MainActivity extends AppCompatActivity {
                     adapter.add(value);
                 }
             }
-
-
         }
+
     }
 }
 
