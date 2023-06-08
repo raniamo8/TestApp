@@ -114,10 +114,8 @@ public class MainActivity extends AppCompatActivity {
      * task to download JSON data from the specified URL.
      * The downloaded JSON data is then parsed to extract
      * the "name" field from each JSON object and the extracted
-     * names are stored in an ArrayList<String>.
+     * names are stored in an ArrayList.
      *
-     * @return An ArrayList<String> containing the
-     *          extracted names from the downloaded JSON data
      */
     private class DownloadJsonTask extends AsyncTask<String, Void, ArrayList<String>> {
         @Nullable
@@ -165,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
          * clearing the previous data and adding the new names.
          * If the result is not null, the names are added to the adapter.
          *
-         * @param result The ArrayList<String> containing the
+         * @param result The ArrayList containing the
          *               extracted names from the downloaded
          *               JSON data.
          */

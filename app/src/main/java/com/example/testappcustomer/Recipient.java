@@ -24,19 +24,22 @@ public class Recipient {
     /**
      * Width and height of QRCode.
      */
-    private static final int WIDTHHEIGHTNR = 400;
+  private static final int WIDTHHEIGHTNR = 400;
     /**
      * Customer Name.
      */
-    private String name;
+  private String name;
+
+    private URL url;
 
     /**
      * Instantiates a new Recipient.
      */
-    public Recipient() {
+    public Recipient() {}
+
+    public void setURL(URL url) {
+        this.url = url;
     }
-
-
     /**
      * Instantiates a new Recipient.
      *
@@ -99,8 +102,6 @@ public class Recipient {
      * network operation.
      * The console displays a HTTP code whether the JSON web token
      * was post successful or not
-     *
-     * @throws Exception if an error occurs during the HTTP-POST request.
      */
     public void sendPost() {
         Thread thread = new Thread(new Runnable() {
