@@ -21,6 +21,8 @@ import java.net.URL;
  * The type Recipient.
  */
 public class Recipient {
+    private HttpURLConnection connection;
+
     /**
      * Width and height of QRCode.
      */
@@ -48,6 +50,13 @@ public class Recipient {
     public Recipient(String name) {
         this.name = name;
     }
+
+
+
+    public void setConnection(HttpURLConnection connection) {
+        this.connection = connection;
+    }
+
 
     /**
      * Gets name.
@@ -104,6 +113,11 @@ public class Recipient {
      * was post successful or not
      */
     public void sendPost() {
+        if (name == null) {
+            throw new NullPointerException("Name is null");
+        }else if (name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name is empty");
+        }
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
