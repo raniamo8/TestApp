@@ -61,8 +61,6 @@ public class RecipientTest {
         // Redirect System.out to capture console output
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
-        //Creating a new Recipient
-        Recipient recipient = new Recipient("Admirali");
         recipient.sendPost();
         // Restore original System.out
         System.setOut(System.out);
@@ -88,15 +86,12 @@ public class RecipientTest {
      */
     @Test
     public void testSendPost() {
-        Recipient recipient = new Recipient("slimshady");
-
         // expected name
         String expectedName = "slimshady";
         recipient.sendPost();
 
         // Verify that the expected name is set in the recipient
-        String actualName = recipient.getName();
-        assertEquals(expectedName, actualName);
+        assertEquals(expectedName, recipient.getName());
     }
 
 
@@ -105,8 +100,7 @@ public class RecipientTest {
      */
     @Test
     public void testSendPostMultipleTimes() {
-        // Create a real instance of the Recipient class
-        Recipient recipient = new Recipient("Springer");
+        recipient.setName("Springer");
 
         // expected name
         String expectedName = "Springer";
@@ -115,9 +109,7 @@ public class RecipientTest {
         recipient.sendPost();
         recipient.sendPost();
 
-        // expected name still set in the recipient
-        String actualName = recipient.getName();
-        assertEquals(expectedName, actualName);
+        assertEquals(expectedName, recipient.getName());
     }
 
     /**
@@ -125,9 +117,11 @@ public class RecipientTest {
      */
     @Test
     public void testSendPostWithEmptyName() {
-        Recipient recipient = new Recipient("");
+        recipient.setName("");
         //Throws IllegalArgumentException
-        assertThrows(IllegalArgumentException.class, recipient::sendPost);
+        assertThrows(IllegalArgumentException.class, () -> {
+            recipient.sendPost();
+        });
     }
 
     /**
@@ -135,7 +129,7 @@ public class RecipientTest {
      */
     @Test
     public void testSendPostWithNullName() {
-        Recipient recipient = new Recipient(null);
+        recipient.setName(null);
         //Throws NullPointerException
         assertThrows(NullPointerException.class, () -> {
             recipient.sendPost();
@@ -151,9 +145,6 @@ public class RecipientTest {
         // Create a mock instance of HttpURLConnection
         mockConnection = mock(HttpURLConnection.class);
 
-        // Create a real instance of the Recipient class
-        Recipient recipient = new Recipient("slimshady");
-
         // Set the mock connection on the recipient
         recipient.setConnection(mockConnection);
 
@@ -162,8 +153,7 @@ public class RecipientTest {
 
         // Verify that the expected name is set in the recipient
         String expectedName = "slimshady";
-        String actualName = recipient.getName();
-        assertEquals(expectedName, actualName);
+        assertEquals(expectedName, recipient.getName());
     }
 
 
@@ -172,10 +162,9 @@ public class RecipientTest {
      * The method should open and close the connection, but the name should remain unchanged.
      */
     @Test
-    public void testSendPost_ResponseCodeNot200() {
+    public void testSendPostResponseCodeNot200() {
         // Create a mock instance of HttpURLConnection
         HttpURLConnection mockConnection = mock(HttpURLConnection.class);
-        Recipient recipient = new Recipient("slimshady");
 
         // Set the mock connection to null.
         recipient.setConnection(null);
@@ -190,12 +179,11 @@ public class RecipientTest {
             // Handle the IOException
             throw new RuntimeException(e);
         }
-        // Verify that the connection is not opened or closed.
+        // Verify that the connection is never opend.
         verify(mockConnection, never()).disconnect();
 
         // Verify that the name remains unchanged
         String expectedName = "slimshady";
-        String actualName = recipient.getName();
-        assertEquals(expectedName, actualName);
+        assertEquals(expectedName, recipient.getName());
     }
 }
