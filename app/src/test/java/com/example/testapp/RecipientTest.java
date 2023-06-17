@@ -58,13 +58,13 @@ public class RecipientTest {
      */
     @Test
     public void testSendPostWithoutServerConnection() {
-        // Redirect System.out to capture console output
+        // Redirect System.out to capture console output.
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outputStream));
         recipient.sendPost();
-        // Restore original System.out
+        // Restore original System.out.
         System.setOut(System.out);
-        // Check if any exception is thrown in the console
+        // Check if any exception is thrown in the console.
         String consoleOutput = outputStream.toString();
         assertFalse(consoleOutput.contains("Exception"));
     }
@@ -145,13 +145,13 @@ public class RecipientTest {
         // Create a mock instance of HttpURLConnection
         mockConnection = mock(HttpURLConnection.class);
 
-        // Set the mock connection on the recipient
+        // Set the mock connection on the recipient.
         recipient.setConnection(mockConnection);
 
-        // Call the sendPost method on the recipient
+        // Call the sendPost method on the recipient.
         recipient.sendPost();
 
-        // Verify that the expected name is set in the recipient
+        // Verify that the expected name is set in the recipient.
         String expectedName = "slimshady";
         assertEquals(expectedName, recipient.getName());
     }
@@ -176,13 +176,12 @@ public class RecipientTest {
         try {
             verify(mockConnection, never()).connect();
         } catch (IOException e) {
-            // Handle the IOException
             throw new RuntimeException(e);
         }
         // Verify that the connection is never opend.
         verify(mockConnection, never()).disconnect();
 
-        // Verify that the name remains unchanged
+        // Verify that the name remains unchanged.
         String expectedName = "slimshady";
         assertEquals(expectedName, recipient.getName());
     }
